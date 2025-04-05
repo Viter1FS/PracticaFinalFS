@@ -18,4 +18,8 @@ public interface ProyectoService {
 
 
     Proyectos addProject(Proyectos proyecto);
+
+    void deleteProjectById(Integer id);
+
+    Proyectos updateById(Integer id, Proyectos updatedProject);
 }

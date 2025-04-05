@@ -63,6 +63,40 @@ public class ProyectoController {
         }
     }
 
+    @DeleteMapping ("/deleteProject/{id}")
+    public ResponseEntity<?> deleteProject(@PathVariable  Integer id) {
+        log.info("Retriving Employee Info - delete project");
+        try {
+            proyectoService.deleteProjectById(id);
+            return ResponseEntity.ok().build();
+
+        }catch (Exception e){
+            return  ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @PutMapping("/updateProject/{id}")
+    public ResponseEntity<Proyectos> updateEmployee(@PathVariable Integer id, @RequestBody Proyectos updatedProject) {
+        log.info("Updating project with id {}", id);
+        try {
+            // Llamamos al servicio para actualizar el proyecto
+            Proyectos updated = proyectoService.updateById(id, updatedProject);
+
+            if (updated != null) {
+                // Si el empleado se actualizó correctamente
+                return ResponseEntity.ok(updated);
+            } else {
+                // Si el empleado no existe, retornamos un error 404
+                return ResponseEntity.notFound().build();
+            }
+
+        }catch (Exception e){
+            // Si el empleado no existe, retornamos un error 404
+            return  ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 

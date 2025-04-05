@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/empleados")
 @Slf4j
 public class EmpleadosController {
-    //comit , de testeo
+
 
     @Autowired  // Inyección de dependencia para usar el servicio EmpleadoService
     EmpleadoService empleadoService;

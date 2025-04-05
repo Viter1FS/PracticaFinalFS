@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,7 +28,8 @@ public class Proyectos {
     String tx_observaciones;
 
 
-
+    @OneToMany(mappedBy = "proyectos")
+    private List<Empleados_proyecto> empleadosProyectos;
 
 
 }

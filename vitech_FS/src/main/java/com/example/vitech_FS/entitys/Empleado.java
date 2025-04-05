@@ -1,8 +1,14 @@
 package com.example.vitech_FS.entitys;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +25,14 @@ public class Empleado {
     String tx_nombre;
     String tx_apellido1;
     String tx_apellido2;
-    String f_nacimiento;
+
+
+    @Column(name = "f_nacimiento")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Past(message = "La fecha de nacimiento debe ser en el pasado")
+    @NotNull(message = "La fecha de nacimiento es obligatoria")
+    private LocalDate f_nacimiento;
+
     String n_telefono1;
     String n_telefono2;
     String tx_email;
@@ -31,7 +44,8 @@ public class Empleado {
     @Version
     private Integer version = 0;
 
-
+    @OneToMany(mappedBy = "empleado")
+    private List<Empleados_proyecto> proyectosEmpleados;
 
 
 }

@@ -59,4 +59,36 @@ public class ProyectosServiceImpl implements ProyectoService {
         log.info("Added project to Database with ID {}", savedProject.getId_proyecto());
         return savedProject;
     }
+
+    @Override
+    public void deleteProjectById(Integer id) {
+        log.info("Deleting employee with id {}", id);
+
+        Optional<Proyectos> projectOpt = proyectosRepository.findById(id);
+        if (projectOpt.isPresent()) {
+            proyectosRepository.deleteById(id);
+            log.info("Project with id {} deleted from Database", id);
+        } else {
+            log.warn("Project with id {} does not exist in Database", id);
+        }
+
+    }
+
+    @Override
+    public Proyectos updateById(Integer id , Proyectos updatedProject)  {
+        log.info("Updating employee to Database with id {}   ", id);
+        Optional<Proyectos> projectOpt = proyectosRepository.findById(id);
+        if(projectOpt.isPresent()){
+            Proyectos existingProject = projectOpt.get();
+            existingProject.setTx_descripción(updatedProject.getTx_descripción());
+            existingProject.setF_inicio(updatedProject.getF_inicio());
+            existingProject.setF_fin(updatedProject.getF_fin());
+            existingProject.setF_baja(updatedProject.getF_baja());
+            existingProject.setTx_lugar(updatedProject.getTx_lugar());
+            existingProject.setTx_observaciones(updatedProject.getTx_observaciones());
+
+            return proyectosRepository.save(existingProject);
+        }
+        return null;
+    }
 }
