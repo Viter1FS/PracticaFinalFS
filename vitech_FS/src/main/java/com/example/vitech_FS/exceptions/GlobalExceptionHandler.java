@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errores);
     }
 
-    //Errores de lectura en las peticiones sandran con este formato ,
+    //Errores de lectura en las peticiones fallan con este formato ,
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         // Esto maneja casos como fechas mal formateadas
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneralException(Exception ex) {
-        // Captura cualquier otra excepción inesperada
+        // Captura cualquier otra excepción inesperada por el servidor
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado en el servidor.");
     }
 }

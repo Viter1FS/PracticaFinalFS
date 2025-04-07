@@ -47,6 +47,9 @@ public class Proyectos {
 
 
     @OneToMany(mappedBy = "proyectos")  // Este era el fix clave
+    // La anotación @JsonManagedReference se utiliza para manejar la serialización de la relación bidireccional.
+    // En este caso, evita la referencia circular durante la serialización de JSON, permitiendo que la lista de proyectos asociados al proyecto
+    // se incluya en la respuesta JSON, mientras que la relación inversa (de Empleados_proyecto hacia Proyecto) se maneja con @JsonBackReference
     @JsonManagedReference("proyecto-empleados")
     private List<Empleados_proyecto> empleadosProyectos;
 

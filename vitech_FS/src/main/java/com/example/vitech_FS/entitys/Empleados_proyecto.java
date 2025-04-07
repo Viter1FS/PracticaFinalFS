@@ -20,15 +20,18 @@ public class Empleados_proyecto {
 
     @EmbeddedId
     Empleados_proyectoPK id_pr_empleados_proyecto;
-
+    // Relación Muchos a Uno con la entidad "Empleados",
+    // sin permitir inserciones ni actualizaciones en la base de datos en esta columna.
     @ManyToOne
     @JoinColumn(name = "ID_EMPLEADO", insertable = false, updatable = false)
-    @JsonBackReference("empleado-proyectos")
+    @JsonBackReference("empleado-proyectos") // Evita la serialización de la relación circular de "Empleado" hacia "Proyecto".
     private Empleado empleado;
 
+    // Relación Muchos a Uno con la entidad "Proyectos",
+    // sin permitir inserciones ni actualizaciones en la base de datos en esta columna.
     @ManyToOne
     @JoinColumn(name = "ID_PROYECTO", insertable = false, updatable = false)
-    @JsonBackReference("proyecto-empleados")
+    @JsonBackReference("proyecto-empleados") // Evita la serialización de la relación circular de "Proyecto" hacia "Empleado".
     private Proyectos proyectos;
 
     @Column(name = "f_alta")
