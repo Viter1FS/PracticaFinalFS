@@ -2,6 +2,7 @@ package com.example.vitech_FS.entitys;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -45,6 +46,7 @@ public class Empleado {
     private Integer version = 0;
 
     @OneToMany(mappedBy = "empleado")
+    @JsonManagedReference("empleado-proyectos")
     private List<Empleados_proyecto> proyectosEmpleados;
 
 

@@ -1,6 +1,7 @@
 package com.example.vitech_FS.entitys;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +29,8 @@ public class Proyectos {
     String tx_observaciones;
 
 
-    @OneToMany(mappedBy = "proyectos")
+    @OneToMany(mappedBy = "proyectos")  // Este era el fix clave
+    @JsonManagedReference("proyecto-empleados")
     private List<Empleados_proyecto> empleadosProyectos;
 
 

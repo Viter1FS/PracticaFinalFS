@@ -21,12 +21,12 @@ public class Empleados_proyecto {
 
     @ManyToOne
     @JoinColumn(name = "ID_EMPLEADO", insertable = false, updatable = false)
-    @JsonBackReference //evita que el ciclo de referencia continue , y no tener una referencia recursiva 
+    @JsonBackReference("empleado-proyectos")
     private Empleado empleado;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PROYECTO" ,insertable = false, updatable = false)
-    @JsonBackReference
+    @JoinColumn(name = "ID_PROYECTO", insertable = false, updatable = false)
+    @JsonBackReference("proyecto-empleados")
     private Proyectos proyectos;
 
     String f_alta;
