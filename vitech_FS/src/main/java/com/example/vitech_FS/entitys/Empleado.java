@@ -1,6 +1,7 @@
 package com.example.vitech_FS.entitys;
 
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -22,6 +23,9 @@ public class Empleado {
 
     @Id
     Integer id_empleado;
+
+    @Column(name = "tx_nif")
+    @NotBlank(message = "El documento de indentidad es obligatorio")
     String tx_nif;
     String tx_nombre;
     String tx_apellido1;
@@ -29,16 +33,32 @@ public class Empleado {
 
 
     @Column(name = "f_nacimiento")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Past(message = "La fecha de nacimiento debe ser en el pasado")
     @NotNull(message = "La fecha de nacimiento es obligatoria")
     private LocalDate f_nacimiento;
 
+    @Pattern(regexp = "^(\\d{9})$", message = "El número de teléfono debe contener exactamente 9 dígitos.")
     String n_telefono1;
+    @Pattern(regexp = "^(\\d{9})$", message = "El número de teléfono debe contener exactamente 9 dígitos.")
     String n_telefono2;
+
+    @NotNull(message = "El correo electrónico es obligatorio.")
+    @Email(message = "El correo electrónico no tiene un formato válido.")
     String tx_email;
-    String f_alta;
-    String f_baja;
+
+    @Column(name = "f_alta")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Past(message = "La fecha de nacimiento debe ser en el pasado")
+    @NotNull(message = "La fecha de alta es obligatoria")
+    private LocalDate f_alta;
+
+    @Column(name = "f_baja")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent(message = "La fecha de baja debe ser hoy o en el futuro.")
+    private LocalDate f_baja;
+
+
     char cx_edocivil;
     char b_formacionu;
 

@@ -4,6 +4,7 @@ package com.example.vitech_FS.controllers;
 
 import com.example.vitech_FS.entitys.Empleado;
 import com.example.vitech_FS.services.EmpleadoService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class EmpleadosController {
 
 
     @PostMapping("/addEmployee")
-    public ResponseEntity<?> addEmployee(@RequestBody Empleado employee) {
+    public ResponseEntity<?> addEmployee (@Valid @RequestBody Empleado employee) {
         log.info("Intentando agregar empleado con ID: {}", employee.getId_empleado());
 
         try {
@@ -83,7 +84,7 @@ public class EmpleadosController {
      * @return El empleado actualizado o una respuesta de error si no se encuentra.
      */
     @PutMapping("/updateEmployee/{id}")
-    public ResponseEntity<Empleado> updateEmployee(@PathVariable Integer id, @RequestBody Empleado updatedEmpleado) {
+    public ResponseEntity<Empleado> updateEmployee(@PathVariable Integer id, @Valid @RequestBody Empleado updatedEmpleado) {
         log.info("Updating employee with id {}", id);
         try {
             // Llamamos al servicio para actualizar el empleado
