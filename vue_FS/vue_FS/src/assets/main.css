@@ -1,12 +1,15 @@
 @import './base.css';
 
+/* Estilo general del contenedor de la app */
 #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  box-sizing: border-box;
 }
 
+/* Estilo de los enlaces */
 a,
 .green {
   text-decoration: none;
@@ -15,21 +18,52 @@ a,
   padding: 3px;
 }
 
+/* Hover en enlaces */
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
 }
 
+/* Estilos para pantallas grandes */
 @media (min-width: 1024px) {
   body {
     display: flex;
     place-items: center;
+    height: 100vh; /* Añadido para asegurar que el cuerpo ocupe toda la altura */
   }
 
   #app {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
     padding: 0 2rem;
+    height: 100%; /* Asegura que el contenido ocupe toda la altura */
+  }
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 1024px) {
+  #app {
+    display: block; /* En pantallas pequeñas, quita el grid */
+    padding: 0 1rem;
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+  }
+
+  body {
+    display: block; /* Asegura que el body no esté centrado con flex en dispositivos pequeños */
+    margin: 0;
+  }
+}
+
+/* Estilo responsivo para la clase .green (si fuera necesario) */
+.green {
+  font-weight: bold;
+  color: hsla(160, 100%, 37%, 1); /* Color verde */
+}
+
+/* Asegura que la barra de navegación ocupe toda la pantalla en dispositivos móviles */
+@media (max-width: 600px) {
+  .v-app-bar {
+    width: 100%;
   }
 }

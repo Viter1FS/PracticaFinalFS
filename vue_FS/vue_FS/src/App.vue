@@ -3,6 +3,7 @@
 <template>
   <v-app>
    <v-main>
+
     <v-app-bar app color="primary" dark>
       <v-toolbar-title>Future  Space</v-toolbar-title>
 
@@ -15,8 +16,10 @@
     </v-app-bar>
 
     
-    
+    <v-container fluid class="content-container">
       <RouterView />
+
+    </v-container>
     </v-main>
   </v-app>
 </template>
@@ -45,5 +48,12 @@ import { RouterLink, RouterView } from 'vue-router'
   
 }
 
+.content-container {
+  flex: 1; /* Esto hace que ocupe todo el espacio disponible */
+  display: flex;
+  justify-content: center; /* Alinear el contenido */
+  align-items: center; /* Centrar el contenido */
+  padding: 16px;
+}
 
 </style>
