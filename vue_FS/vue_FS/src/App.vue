@@ -10,7 +10,7 @@
       <v-spacer />
       <div class="links-container">
       <RouterLink to="/" class="home-link">Home</RouterLink>
-      <RouterLink to="/" class="home-link">About</RouterLink>
+      <RouterLink to="/projects" class="home-link">Proyectos</RouterLink>
       <RouterLink to="/" class="home-link">Others</RouterLink>
       </div>
     </v-app-bar>
