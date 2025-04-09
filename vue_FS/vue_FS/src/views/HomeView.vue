@@ -1,45 +1,31 @@
-
-
 <template>
   <v-container fluid class="pa-4 fill-width">
     <div class="container-main">
-    <v-text-field
-      v-model="search"
-      label="Buscar"
-      prepend-inner-icon="mdi-magnify"
-      
-      autofocus
-    />
+      <v-text-field v-model="search" label="Buscar" prepend-inner-icon="mdi-magnify" autofocus />
 
-     <!-- Tabla de datos -->
-     <v-data-table
-      :headers="headers"
-      :items="users"
-      :search="search"
-      class="elevation-1"
-    >
-      <template #item.actions="{ item }">
-        <v-btn icon @click="editUser(item)" >
-          <i class="fa fa-pencil" aria-hidden="true"></i>
+      <!-- Tabla de datos -->
+      <v-data-table :headers="headers" :items="users" :search="search" class="elevation-1">
+        <template #item.actions="{ item }">
+          <v-btn icon @click="editUser(item)">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </v-btn>
+          <v-btn icon color="red" @click="deleteUser(item)">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </v-btn>
+        </template>
+      </v-data-table>
+      <!-- Botón flotante para agregar -->
+      <div class="mt-4 d-flex justify-end">
+        <v-btn icon color="primary" class="add-user-btn" fab @click="openDialog()" style="">
+          <i class="fa fa-plus" aria-hidden="true"></i>
         </v-btn>
-        <v-btn icon color="red" @click="deleteUser(item)">
-          <i class="fa fa-trash" aria-hidden="true"></i>
-        </v-btn>
-      </template>
-    </v-data-table>
-  </div>
+      </div>
 
-    <!-- Botón flotante para agregar -->
-    <v-btn
-      icon
-      color="primary"
-      class="ma-4"
-      fab
-      @click="openDialog()"
-      style="position: fixed; bottom: 10px; right: 20px;"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+
+
+
+    </div>
+
 
     <!-- Diálogo para agregar/editar -->
     <v-dialog v-model="dialog" max-width="500px">
@@ -49,16 +35,16 @@
         </v-card-title>
         <v-card-text>
           <v-form ref="formRef">
-            <v-text-field
-              label="Nombre"
-              v-model="editedUser.tx_nombre"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              label="Email"
-              v-model="editedUser.tx_email"
-              :rules="[rules.required, rules.tx_email]"
-            />
+            <v-text-field label="NIF" v-model="editedUser.tx_nif" :rules="[rules.required]" />
+            <v-text-field label="Primer apellido" v-model="editedUser.tx_apellido1" :rules="[rules.required]" />
+            <v-text-field label="Segundo apellido" v-model="editedUser.tx_apellido2" />
+            <v-text-field label="Fecha de nacimiento" v-model="editedUser.f_nacimiento" type="date" />
+            <v-text-field label="Teléfono 1" v-model="editedUser.n_telefono1" />
+            <v-text-field label="Teléfono 2" v-model="editedUser.n_telefono2" />
+            <v-text-field label="Fecha alta" v-model="editedUser.f_alta" type="date" />
+            <v-text-field label="Fecha baja" v-model="editedUser.f_baja" type="date" />
+            <v-text-field label="Estado civil" v-model="editedUser.cx_edocivil" />
+            <v-switch label="¿Formación universitaria?" v-model="editedUser.b_formacionu" />
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -120,7 +106,7 @@ export default {
 
 
       users: [],
-      
+
       headers: [
         { title: 'ID', key: 'id_empleado' },
         { title: 'NIF', key: 'tx_nif' },
@@ -157,7 +143,20 @@ export default {
     openDialog(user = null) {
       if (user) {
         this.editedUser.id_empleado = user.id_empleado
+        this.editedUser.tx_nif=user.tx_nif,  
         this.editedUser.tx_nombre = user.tx_nombre
+        this.editedUser.tx_apellido1 = user.tx_apellido1
+        this.editedUser.tx_apellido2 = user.tx_apellido2
+        this.editedUser.f_nacimiento = user.f_nacimiento
+        this.editedUser.n_telefono1 = user.n_telefono1
+        this.editedUser.n_telefono2 = user.n_telefono2
+        this.editedUser.tx_email = user.tx_email
+        this.editedUser.f_alta = user.f_alta
+        this.editedUser.f_baja = user.f_baja
+        this.editedUser.cx_edocivil = user.cx_edocivil
+        this.editedUser.b_formacionu = user.b_formacionu
+
+
         this.editedUser.tx_email = user.tx_email
       } else {
         this.editedUser.id_empleado = null
@@ -231,42 +230,52 @@ export default {
 }
 </script>
 
-<style scoped> 
+<style scoped>
+.container-main {
 
-.container-main{
-
-  
-  width: 100%; 
-  max-width: 1400px; 
-  margin: 0 ,  auto;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0, auto;
   margin-right: 50vh;
   margin-left: -15vh;
-  padding: 5px; 
-  box-sizing: border-box; 
+  padding: 5px;
+  box-sizing: border-box;
   display: block;
 
 
 }
 
 .v-data-table-header th {
-  padding-left: -100px;  /* Reducir el padding izquierdo */
-  padding-right: -100px; /* Reducir el padding derecho */
+  padding-left: -100px;
+  /* Reducir el padding izquierdo */
+  padding-right: -100px;
+  /* Reducir el padding derecho */
+}
+
+.add-user-btn {
+  transition: all 0.3s ease;
+  position: absolute;
+    bottom: 30px;
+    right: 25px;
+    z-index: 10;
 }
 
 @media (max-width: 768px) {
   .container-main {
-    width: 90%; /* En pantallas pequeñas, puede ocupar el 90% */
-    margin-right: 350vh ;
-   
+    width: 90%;
+    /* En pantallas pequeñas, puede ocupar el 90% */
+    margin-right: 350vh;
+
   }
+
+    .add-user-btn {
+      width: 100%;
+      justify-content: center;
+    }
 
 
 
 
 }
-
-
-
-
-
 </style>
