@@ -22,7 +22,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 */
                 .allowedOrigins("http://localhost:5173")
                 // Permite los métodos HTTP GET, POST, PUT y DELETE
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 //Permite cualquier encabezado en la solicitud CORS
                 .allowedHeaders("*")
                 //Permite el envío de cookies y credenciales en las solicitudes CORS

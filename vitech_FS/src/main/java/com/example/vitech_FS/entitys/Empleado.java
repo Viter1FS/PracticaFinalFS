@@ -40,16 +40,16 @@ public class Empleado {
 
     @Pattern(regexp = "^(\\d{9})$", message = "El número de teléfono debe contener exactamente 9 dígitos.")
     String n_telefono1;
-    @Pattern(regexp = "^(\\d{9})$", message = "El número de teléfono debe contener exactamente 9 dígitos.")
+
     String n_telefono2;
 
     @NotNull(message = "El correo electrónico es obligatorio.")
-    @Email(message = "El correo electrónico no tiene un formato válido.")
+    @Pattern(regexp = ".*@.*", message = "El correo electrónico no tiene un formato válido.")
     String tx_email;
 
     @Column(name = "f_alta")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Past(message = "La fecha de nacimiento debe ser en el pasado")
+    @PastOrPresent(message = "La fecha de alta puede ser hoy o en el pasado")
     @NotNull(message = "La fecha de alta es obligatoria")
     private LocalDate f_alta;
 
