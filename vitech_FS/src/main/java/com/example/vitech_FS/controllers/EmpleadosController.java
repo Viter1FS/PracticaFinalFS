@@ -3,6 +3,7 @@ package com.example.vitech_FS.controllers;
 
 
 import com.example.vitech_FS.entitys.Empleado;
+import com.example.vitech_FS.entitys.Proyectos;
 import com.example.vitech_FS.services.EmpleadoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -103,6 +104,10 @@ public class EmpleadosController {
             return  ResponseEntity.notFound().build();
         }
     }
+
+
+
+
 
 
 

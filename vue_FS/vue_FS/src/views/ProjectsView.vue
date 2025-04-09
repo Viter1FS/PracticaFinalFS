@@ -99,7 +99,7 @@
                 type="date"
               />
               <v-switch
-                label="¿Estado casad@?"
+                label="¿Esta casad@?"
                 v-model="editedUser.cx_edocivil"
                 color="primary"
               />
@@ -141,19 +141,15 @@
         users: [],
   
         headers: [
-          { title: "ID_proyecto", key: "id_empleado" },
-          { title: "NIF", key: "tx_nif" },
-          { title: "Nombre", key: "tx_nombre" },
-          { title: "Primer apellido", key: "tx_apellido1" },
-          { title: "Segundo apellido", key: "tx_apellido2" },
-          { title: "Nacimiento", key: "f_nacimiento" },
-          { title: "Primer telefono", key: "n_telefono1" },
-          { title: "Segundo telefono", key: "n_telefono2" },
-          { title: "Email", key: "tx_email" },
-          { title: "Fecha alta", key: "f_alta" },
+          { title: "ID", key: "id_proyecto" },
+          { title: "Descrición", key: "tx_descripción" },
+          { title: "Fecha inicio", key: "f_inicio" },
+          { title: "Fecha fin", key: "f_fin" },
           { title: "Fecha baja", key: "f_baja" },
-          { title: "Estado civil", key: "cx_edocivil" },
-          { title: "Form uni", key: "b_formacionu" },
+          { title: "Lugar", key: "tx_lugar" },
+          { title: "Observaciones", key: "tx_observaciones" },
+          
+
           { title: "Acciones", key: "actions", sortable: false },
         ],
   

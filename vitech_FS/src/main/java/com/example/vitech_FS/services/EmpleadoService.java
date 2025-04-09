@@ -2,6 +2,7 @@ package com.example.vitech_FS.services;
 
 
 import com.example.vitech_FS.entitys.Empleado;
+import com.example.vitech_FS.entitys.Proyectos;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface EmpleadoService {
     Empleado addEmployee(Empleado e);
 
     Empleado updateById (Integer id , Empleado e);
+
+
 }

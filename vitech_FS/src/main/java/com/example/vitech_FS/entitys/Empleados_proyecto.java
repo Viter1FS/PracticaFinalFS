@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -36,6 +38,6 @@ public class Empleados_proyecto {
 
     @Column(name = "f_alta")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    String f_alta;
+    private LocalDate f_alta;
 
 }
