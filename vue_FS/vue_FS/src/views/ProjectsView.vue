@@ -17,10 +17,10 @@
         >
           <template #item.actions="{ item }">
             <div class="d-flex">
-              <v-btn icon @click="editUser(item)" class="mr-1">
+              <v-btn icon @click="editProject(item)" class="mr-1">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </v-btn>
-              <v-btn icon color="red" @click="deleteEmpleado(item)">
+              <v-btn icon color="red" @click="dismissProject(item)">
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </v-btn>
             </div>
@@ -122,7 +122,6 @@
           { title: "Descrición", key: "tx_descripción" },
           { title: "Fecha inicio", key: "f_inicio" },
           { title: "Fecha fin", key: "f_fin" },
-          { title: "Fecha baja", key: "f_baja" },
           { title: "Lugar", key: "tx_lugar" },
           { title: "Observaciones", key: "tx_observaciones" },
           { title: "Acciones", key: "actions", sortable: false },
@@ -171,13 +170,13 @@
         this.dialog = false;
       },
   
-      editUser(project) {
+      editProject(project) {
         this.openDialog(project);
       },
   
       deleteUser(project) {
         this.projects = this.projects.filter((p) => p.id_proyecto !== project.id_proyecto);
-        this.snackbarText = "Usuario eliminado";
+        this.snackbarText = "Projecto eliminado";
         this.snackbar = true;
       },
   
@@ -193,7 +192,10 @@
             f_fin : pro.f_fin,
             f_baja : pro.f_baja,
             tx_lugar : pro.tx_lugar,
-            tx_observaciones : pro.tx_observaciones
+            tx_observaciones : pro.tx_observaciones,
+            id_empleado: pro.empleadosProyectos.map(
+              (item) => item.id_pr_empleados_proyecto.id_empleado
+            ), 
           }));
         } catch (error) {
           console.error("Error al obtener los empleados", error);
@@ -221,7 +223,7 @@
               this.editedProject
             );
   
-            // Actualizar el usuario en la lista local
+            // Actualizar el proyecto en la lista local
             const index = this.projects.findIndex(
               (p) => p.id_proyecto === this.editedProject.id_proyecto
             );
@@ -253,34 +255,55 @@
         this.snackbar = true;
         this.closeDialog();
       },
-  
-      async deleteEmpleado(user) {
+
+      async dismissProject(project) {
         try {
+
+          // Validar si el empleado tiene proyectos asignados
+          if (project.id_empleado && project.id_empleado.length > 0) {
+            
+            alert(
+              `No se puede dar de baja el proyecto ${project.tx_descripción} porque tiene asignado al menos un recurso`
+            );
+            return;
+          }
+
+
+
           // Confirmación antes de eliminar
           const confirmDelete = confirm(
-            `¿Estás seguro de que deseas eliminar al usuario ${user.tx_nombre} ${user.tx_apellido1}?`
+            `¿Estás seguro de que deseas dar de baja al proyecto ${project.id_proyecto} ${project.tx_descripción}?`
           );
+
           if (!confirmDelete) return;
-  
-          // Hacemos la solicitud DELETE al backend
-          const response = await axios.delete(
-            `http://localhost:8080/empleados/deleteEmployee/${user.id_empleado}`
+          // Le asignamos la fecha actual como "fecha de baja"
+          const fechaHoy = new Date().toISOString().split("T")[0];
+          const proyectoBaja = {
+            ...project,
+            f_baja: fechaHoy,
+          };
+
+          // Llamamos al endpoint de actualización normal (como si estuviéramos editando)
+          const response = await axios.put(
+            `http://localhost:8080/proyectos/updateProject/${project.id_proyecto}`,
+            proyectoBaja
           );
-  
+
           // Si la respuesta es exitosa, eliminamos el usuario de la lista local
+
           if (response.status === 200) {
             this.projects = this.projects.filter(
-              (u) => u.id_empleado !== user.id_empleado
+              (p) => p.id_proyecto !== projects.id_proyecto
             );
-            this.snackbarText = "Usuario eliminado con éxito";
+            this.snackbarText = "Proyecto dado de baja con éxito";
             this.snackbar = true;
           }
         } catch (error) {
-          console.error("Error al eliminar el usuario", error);
-          this.snackbarText = "Error al eliminar el usuario";
+          console.error("Error al dar de baja el proyecto", error);
+          this.snackbarText = "Error al dar de baja el proyecto";
           this.snackbar = true;
         }
-      },
+      }
     },
   };
   </script>

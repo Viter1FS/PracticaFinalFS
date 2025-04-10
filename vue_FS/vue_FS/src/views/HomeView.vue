@@ -98,14 +98,14 @@
               v-model="editedUser.f_baja"
               type="date"
             />
-            <v-select
+            <!-- <v-select
               label="Proyecto"
               :items="proyectos_options"
               :item-title="(item)=>`${item.id_proyecto} - ${item.tx_descripción}`"
               v-model="editedUser.id_proyecto"
               dense
               
-            />
+            /> -->
 
             <v-switch
               label="¿Estado casad@?"
@@ -162,7 +162,6 @@ export default {
         { title: "Segundo telefono", key: "n_telefono2" },
         { title: "Email", key: "tx_email" },
         { title: "Fecha alta", key: "f_alta" },
-        { title: "Fecha baja", key: "f_baja" },
         { title: "Estado civil", key: "cx_edocivil" },
         { title: "Form uni", key: "b_formacionu" },
         { title: "Acciones", key: "actions", sortable: false },
@@ -257,8 +256,8 @@ export default {
         }))),
 
         
-
-        this.empleados = response_emp.data;
+        
+        this.empleados = response_emp.data.filter(emp => !emp.f_baja);
         this.users = this.empleados.map((emp) => ({
           id_empleado: emp.id_empleado,
           tx_nif: emp.tx_nif,
@@ -370,6 +369,19 @@ export default {
 
     async dismissEmpleado(user) {
       try {
+
+        // Validar si el empleado tiene proyectos asignados
+        if (user.id_proyecto && user.id_proyecto.length > 0) {
+          const nombresProyectos = this.proyectos_options
+            .filter((p) => user.id_proyecto.includes(p.id_proyecto))
+            .map((p) => p.tx_descripción)
+            .join(", ");
+          alert(
+            `No se puede dar de baja al empleado ${user.tx_nombre} ${user.tx_apellido1} porque está asignado a el/los proyecto/s ${nombresProyectos}`
+          );
+          return;
+        }
+
         // Confirmación antes de eliminar
         const confirmDelete = confirm(
           `¿Estás seguro de que deseas dar de baja al empleado ${user.tx_nombre} ${user.tx_apellido1}?`
