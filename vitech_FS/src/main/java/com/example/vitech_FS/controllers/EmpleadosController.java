@@ -106,6 +106,17 @@ public class EmpleadosController {
     }
 
 
+//    @GetMapping("/{id}/projects")
+//    public ResponseEntity<?> getProjectsByEmployee(@PathVariable Integer id) {
+//        try {
+//            List<Proyectos> projects = empleadoService.getProjectsByEmployee(id);
+//            return ResponseEntity.ok(projects);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("Error al obtener los proyectos del empleado.");
+//        }
+//    }
+
+
 
 
 

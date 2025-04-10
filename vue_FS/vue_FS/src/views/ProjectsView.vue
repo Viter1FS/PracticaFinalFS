@@ -11,7 +11,7 @@
         <!-- Tabla de datos -->
         <v-data-table
           :headers="headers"
-          :items="users"
+          :items="projects"
           :search="search"
           class="elevation-1"
         >
@@ -46,74 +46,51 @@
         <v-card>
           <v-card-title>
             <span class="text-h6">{{
-              editedUser.id_empleado ? "Editar Usuario" : "Nuevo Usuario"
+              editedProject.id_proyecto ? "Editar proyecto" : "Nuevo proyecto"
             }}</span>
           </v-card-title>
           <v-card-text>
             <v-form ref="formRef">
               <v-text-field
-                label="NIF"
-                v-model="editedUser.tx_nif"
+                label="Descrición"
+                v-model="editedProject.tx_descripción"
                 :rules="[rules.required]"
               />
               <v-text-field
-                label="Nombre"
-                v-model="editedUser.tx_nombre"
-                :rules="[rules.required]"
-              />
-              <v-text-field
-                label="Primer apellido"
-                v-model="editedUser.tx_apellido1"
-                :rules="[rules.required]"
-              />
-              <v-text-field
-                label="Segundo apellido"
-                v-model="editedUser.tx_apellido2"
-              />
-              <v-text-field
-                label="Fecha de nacimiento"
-                v-model="editedUser.f_nacimiento"
+                label="Fecha inicio"
+                v-model="editedProject.f_inicio"
                 type="date"
                 :rules="[rules.required]"
               />
+              
               <v-text-field
-                label="Teléfono 1"
-                v-model="editedUser.n_telefono1"
-                :rules="[rules.required]"
-              />
-              <v-text-field label="Teléfono 2" v-model="editedUser.n_telefono2" />
-              <v-text-field
-                label="Email"
-                v-model="editedUser.tx_email"
-                type="email"
-              />
-              <v-text-field
-                label="Fecha alta"
-                v-model="editedUser.f_alta"
+                label="Fecha fin"
+                v-model="editedProject.f_fin"
                 type="date"
-                :rules="[rules.required]"
+                
               />
               <v-text-field
                 label="Fecha baja"
-                v-model="editedUser.f_baja"
+                v-model="editedProject.f_baja"
                 type="date"
               />
-              <v-switch
-                label="¿Esta casad@?"
-                v-model="editedUser.cx_edocivil"
-                color="primary"
+
+              <v-text-field
+                label="Lugar"
+                v-model="editedProject.tx_lugar"
               />
-              <v-switch
-                label="¿Formación universitaria?"
-                v-model="editedUser.b_formacionu"
-                color="primary"
+              <v-text-field
+                label="Observaciones"
+                v-model="editedProject.tx_observaciones"
+                
               />
+             
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
             <v-btn text @click="closeDialog">Cancelar</v-btn>
-            <v-btn color="primary" @click="saveEmpleado">Guardar</v-btn>
+            <v-btn color="primary" @click="saveProyecto">Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -138,7 +115,7 @@
         snackbarText: "",
         formRef: null,
         proyectos: [],
-        users: [],
+        projects: [],
   
         headers: [
           { title: "ID", key: "id_proyecto" },
@@ -148,24 +125,17 @@
           { title: "Fecha baja", key: "f_baja" },
           { title: "Lugar", key: "tx_lugar" },
           { title: "Observaciones", key: "tx_observaciones" },
-          
-
           { title: "Acciones", key: "actions", sortable: false },
         ],
   
-        editedUser: {
-          id_empleado: null,
-          tx_nombre: "",
-          tx_apellido1: "",
-          tx_apellido2: "",
-          f_nacimiento: "",
-          n_telefono1: "",
-          n_telefono2: "",
-          tx_email: "",
-          f_alta: "",
+        editedProject: {
+          id_proyecto: null,
+          tx_descripción: "",
+          f_inicio: "",
+          f_fin: "",
           f_baja: "",
-          cx_edocivil: false,
-          b_formacionu: false,
+          tx_lugar: "",
+          tx_observaciones: "",
         },
         rules: {
           required: (v) => !!v || "Campo requerido",
@@ -174,34 +144,24 @@
       };
     },
     created() {
-      this.fetchEmpleados();
+      this.fetchProyectos();
     },
     methods: {
-      openDialog(user = null) {
-        console.log("Abriendo diálogo...", user);
-        if (user) {
-          this.editedUser = {
-            ...user,
-            // Suponiendo que recibes "C" y "S" y quieres que:
-            // "C" → true (casado) y "S" → false (no casado)
-            cx_edocivil: user.cx_edocivil === "C",
-            // Para formación, si "S" significa que tiene formación, lo conviertes a boolean
-            b_formacionu: user.b_formacionu === "S",
+      openDialog(proyect = null) {
+        console.log("Abriendo diálogo...", proyect);
+        if (proyect) {
+          this.editedProject = {
+            ...proyect,
           };
         } else {
-          this.editedUser = {
-            id_empleado: null,
-            tx_nombre: "",
-            tx_apellido1: "",
-            tx_apellido2: "",
-            f_nacimiento: "",
-            n_telefono1: "",
-            n_telefono2: "",
-            tx_email: "",
-            f_alta: "",
-            f_baja: "",
-            cx_edocivil: false,
-            b_formacionu: false,
+          this.editedProject = {
+          id_proyecto: null,
+          tx_descripción: "",
+          f_inicio: "",
+          f_fin: "",
+          f_baja: "",
+          tx_lugar: "",
+          tx_observaciones: ""
           };
         }
         this.dialog = true;
@@ -211,44 +171,37 @@
         this.dialog = false;
       },
   
-      editUser(user) {
-        this.openDialog(user);
+      editUser(project) {
+        this.openDialog(project);
       },
   
-      deleteUser(user) {
-        this.users = this.users.filter((u) => u.id_empleado !== user.id_empleado);
+      deleteUser(project) {
+        this.projects = this.projects.filter((p) => p.id_proyecto !== project.id_proyecto);
         this.snackbarText = "Usuario eliminado";
         this.snackbar = true;
       },
   
       //API
-      async fetchEmpleados() {
+      async fetchProyectos() {
         try {
-          const response = await axios.get("http://localhost:8080/empleados/all");
-          this.empleados = response.data;
-          this.users = this.empleados.map((emp) => ({
-            id_empleado: emp.id_empleado,
-            tx_nif: emp.tx_nif,
-            tx_nombre: emp.tx_nombre,
-            tx_apellido1: emp.tx_apellido1,
-            tx_apellido2: emp.tx_apellido2,
-            f_nacimiento: emp.f_nacimiento,
-            n_telefono1: emp.n_telefono1,
-            n_telefono2: emp.n_telefono2,
-            tx_email: emp.tx_email,
-            f_alta: emp.f_alta,
-            f_baja: emp.f_baja,
-  
-            cx_edocivil: emp.cx_edocivil,
-            b_formacionu: emp.b_formacionu,
+          const response = await axios.get("http://localhost:8080/proyectos/all");
+          // this.proyectos = response.data;
+            this.projects = response.data.map((pro) => ({
+            id_proyecto: pro.id_proyecto,
+            tx_descripción : pro.tx_descripción,
+            f_inicio : pro.f_inicio,
+            f_fin : pro.f_fin,
+            f_baja : pro.f_baja,
+            tx_lugar : pro.tx_lugar,
+            tx_observaciones : pro.tx_observaciones
           }));
         } catch (error) {
           console.error("Error al obtener los empleados", error);
         }
       },
       //--------------------------------------
-      async saveEmpleado() {
-        console.log("Datos a guardar:", this.editedUser);
+      async saveProyecto() {
+        console.log("Datos a guardar:", this.editedProject);
   
         // Asegurarnos de que la referencia del formulario esté disponible
         if (!this.$refs.formRef) {
@@ -260,43 +213,39 @@
         const isValid = await this.$refs.formRef.validate();
         if (!isValid.valid) return;
   
-        // Convertir valores booleanos de nuevo a los valores esperados por el backend
-        this.editedUser.cx_edocivil = this.editedUser.cx_edocivil ? "C" : "S"; // Casado 'C', no casado 'S'
-        this.editedUser.b_formacionu = this.editedUser.b_formacionu ? "S" : "N";
-  
-        if (this.editedUser.id_empleado) {
+        if (this.editedProject.id_proyecto) {
           // Actualizar un usuario existente
           try {
             const response = await axios.put(
-              `http://localhost:8080/empleados/updateEmployee/${this.editedUser.id_empleado}`,
-              this.editedUser
+              `http://localhost:8080/proyectos/updateProject/${this.editedProject.id_proyecto}`,
+              this.editedProject
             );
   
             // Actualizar el usuario en la lista local
-            const index = this.users.findIndex(
-              (u) => u.id_empleado === this.editedUser.id_empleado
+            const index = this.projects.findIndex(
+              (p) => p.id_proyecto === this.editedProject.id_proyecto
             );
             if (index !== -1) {
-              this.users[index] = { ...response.data };
+              this.projects[index] = { ...response.data };
             }
   
-            this.snackbarText = "Usuario actualizado";
+            this.snackbarText = "Proyecto actualizado";
           } catch (error) {
-            console.error("Error al actualizar el usuario", error);
-            this.snackbarText = "Error al actualizar el usuario";
+            console.error("Error al actualizar el proyecto", error);
+            this.snackbarText = "Error al actualizar el proyecto";
           }
         } else {
-          // Crear un nuevo usuario
+          // Crear un nuevo proyecto
           try {
             const response = await axios.post(
-              "http://localhost:8080/empleados/addEmployee",
-              this.editedUser
+              "http://localhost:8080/proyectos/addProject",
+              this.editedProject
             );
-            this.users.push(response.data);
-            this.snackbarText = "Usuario agregado";
+            this.projects.push(response.data);
+            this.snackbarText = "Proyecto agregado";
           } catch (error) {
-            console.error("Error al agregar el usuario", error);
-            this.snackbarText = "Error al agregar el usuario";
+            console.error("Error al agregar el proyecto", error);
+            this.snackbarText = "Error al agregar el proyecto";
           }
         }
   
@@ -320,7 +269,7 @@
   
           // Si la respuesta es exitosa, eliminamos el usuario de la lista local
           if (response.status === 200) {
-            this.users = this.users.filter(
+            this.projects = this.projects.filter(
               (u) => u.id_empleado !== user.id_empleado
             );
             this.snackbarText = "Usuario eliminado con éxito";
@@ -343,7 +292,7 @@
     max-width: 1400px;
     margin: 0, auto;
     margin-right: 50vh;
-    margin-left: -15vh;
+    margin-left: -2vh;
     padding: 5px;
     box-sizing: border-box;
     display: block;
@@ -360,7 +309,7 @@
     transition: all 0.3s ease;
     position: absolute;
     bottom: 30px;
-    right: 25px;
+    right: 30px;
     z-index: 10;
   }
   

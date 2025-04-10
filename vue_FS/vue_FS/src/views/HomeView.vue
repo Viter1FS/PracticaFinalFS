@@ -17,10 +17,10 @@
       >
         <template #item.actions="{ item }">
           <div class="d-flex">
-            <v-btn icon @click="editUser(item)" class="mr-1">
+            <v-btn icon @click="editUser(item)" class="mr-2">
               <i class="fa fa-pencil" aria-hidden="true"></i>
             </v-btn>
-            <v-btn icon color="red" @click="deleteEmpleado(item)">
+            <v-btn icon color="red" @click="dismissEmpleado(item)" class="mr-2">
               <i class="fa fa-trash" aria-hidden="true"></i>
             </v-btn>
           </div>
@@ -46,7 +46,7 @@
       <v-card>
         <v-card-title>
           <span class="text-h6">{{
-            editedUser.id_empleado ? "Editar Usuario" : "Nuevo Usuario"
+            editedUser.id_empleado ? "Editar empleado" : "Nuevo empleado"
           }}</span>
         </v-card-title>
         <v-card-text>
@@ -98,6 +98,15 @@
               v-model="editedUser.f_baja"
               type="date"
             />
+            <v-select
+              label="Proyecto"
+              :items="proyectos_options"
+              :item-title="(item)=>`${item.id_proyecto} - ${item.tx_descripción}`"
+              v-model="editedUser.id_proyecto"
+              dense
+              
+            />
+
             <v-switch
               label="¿Estado casad@?"
               v-model="editedUser.cx_edocivil"
@@ -139,6 +148,8 @@ export default {
       formRef: null,
       empleados: [],
       users: [],
+      proyectos_options: [],
+      
 
       headers: [
         { title: "ID", key: "id_empleado" },
@@ -159,6 +170,7 @@ export default {
 
       editedUser: {
         id_empleado: null,
+        id_proyecto: null,
         tx_nombre: "",
         tx_apellido1: "",
         tx_apellido2: "",
@@ -186,15 +198,18 @@ export default {
       if (user) {
         this.editedUser = {
           ...user,
+
           // Suponiendo que recibes "C" y "S" y quieres que:
           // "C" → true (casado) y "S" → false (no casado)
           cx_edocivil: user.cx_edocivil === "C",
           // Para formación, si "S" significa que tiene formación, lo conviertes a boolean
           b_formacionu: user.b_formacionu === "S",
+          
         };
       } else {
         this.editedUser = {
           id_empleado: null,
+          id_proyecto: null,
           tx_nombre: "",
           tx_apellido1: "",
           tx_apellido2: "",
@@ -228,8 +243,22 @@ export default {
     //API
     async fetchEmpleados() {
       try {
-        const response = await axios.get("http://localhost:8080/empleados/all");
-        this.empleados = response.data;
+        // const proyectosAsignados = proyectosEmpleados.map(item => item.id_pr_empleados_proyecto.id_proyecto);
+        const response_emp = await axios.get(
+          "http://localhost:8080/empleados/all"
+        );
+        const response_proyects = await axios.get(
+          "http://localhost:8080/proyectos/all"
+        );
+        // this.proyectos = response.data;
+        (this.proyectos_options = response_proyects.data.map((pro) => ({
+          id_proyecto: pro.id_proyecto,
+          tx_descripción: pro.tx_descripción,
+        }))),
+
+        
+
+        this.empleados = response_emp.data;
         this.users = this.empleados.map((emp) => ({
           id_empleado: emp.id_empleado,
           tx_nif: emp.tx_nif,
@@ -242,10 +271,13 @@ export default {
           tx_email: emp.tx_email,
           f_alta: emp.f_alta,
           f_baja: emp.f_baja,
-
           cx_edocivil: emp.cx_edocivil,
           b_formacionu: emp.b_formacionu,
+          id_proyecto: emp.proyectosEmpleados.map(
+            (item) => item.id_pr_empleados_proyecto.id_proyecto
+          ),
         }));
+        console.log(this.users);
       } catch (error) {
         console.error("Error al obtener los empleados", error);
       }
@@ -332,6 +364,43 @@ export default {
       } catch (error) {
         console.error("Error al eliminar el usuario", error);
         this.snackbarText = "Error al eliminar el usuario";
+        this.snackbar = true;
+      }
+    },
+
+    async dismissEmpleado(user) {
+      try {
+        // Confirmación antes de eliminar
+        const confirmDelete = confirm(
+          `¿Estás seguro de que deseas dar de baja al empleado ${user.tx_nombre} ${user.tx_apellido1}?`
+        );
+
+        if (!confirmDelete) return;
+        // Le asignamos la fecha actual como "fecha de baja"
+        const fechaHoy = new Date().toISOString().split("T")[0];
+        const empleadoBaja = {
+          ...user,
+          f_baja: fechaHoy,
+        };
+
+        // Llamamos al endpoint de actualización normal (como si estuviéramos editando)
+        const response = await axios.put(
+          `http://localhost:8080/empleados/updateEmployee/${user.id_empleado}`,
+          empleadoBaja
+        );
+
+        // Si la respuesta es exitosa, eliminamos el usuario de la lista local
+
+        if (response.status === 200) {
+          this.users = this.users.filter(
+            (u) => u.id_empleado !== user.id_empleado
+          );
+          this.snackbarText = "Empleado dado de baja con éxito";
+          this.snackbar = true;
+        }
+      } catch (error) {
+        console.error("Error al dar de baja el empleado", error);
+        this.snackbarText = "Error al dar de baja el empleado";
         this.snackbar = true;
       }
     },
