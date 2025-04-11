@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -65,21 +66,26 @@ public class Empleado_ProyectoServiceImpl implements Empleado_ProyectoService {
         empleadosProyectoRepository.save(proyectosEmpleados);
     }
 
+    @Override
     public void removeProjectFromEmployee(Integer employeeId, Integer projectId) {
         Empleado empleado = empleadoRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
         Proyectos proyecto = proyectoRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
 
         Empleados_proyectoPK empk = new Empleados_proyectoPK(employeeId,projectId);
-        Empleados_proyecto ep = empleadosProyectoRepository.findById(empk).orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        Optional<Empleados_proyecto> epOptional = empleadosProyectoRepository.findById(empk);
+        if (epOptional.isPresent()) {
+            Empleados_proyecto ep = epOptional.get();
 
-        // Eliminar la asignación del empleado al proyecto
-        empleado.getProyectosEmpleados().remove(ep); // Asumiendo que 'proyectos' es una lista en el modelo de empleado
-        proyecto.getEmpleadosProyectos().remove(ep);
-        
-        // Guardar la actualización en la base de datos
-        empleadoRepository.save(empleado);
-        proyectoRepository.save(proyecto);
-        empleadosProyectoRepository.delete(ep);
+            empleado.getProyectosEmpleados().remove(ep);
+            proyecto.getEmpleadosProyectos().remove(ep);
+
+            empleadoRepository.save(empleado);
+            proyectoRepository.save(proyecto);
+            empleadosProyectoRepository.delete(ep);
+        } else {
+            System.out.println("No se encontró relación Empleado-Proyecto: " + employeeId + " - " + projectId);
+            // No lanzamos error porque simplemente no está asignado.
+        }
     }
 
 }

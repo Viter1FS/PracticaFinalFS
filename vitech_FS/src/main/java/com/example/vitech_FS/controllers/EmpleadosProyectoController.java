@@ -52,6 +52,8 @@ public class EmpleadosProyectoController {
             @PathVariable Integer projectId,
             @RequestBody List<Integer> employeeIds // Recibimos la lista de IDs de empleados
     ) {
+        System.out.println("Proyecto: " + projectId);
+        System.out.println("Empleados a desasignar: " + employeeIds);
         try {
             // Llamamos al servicio para desasignar el proyecto de cada empleado
             for (Integer employeeId : employeeIds) {

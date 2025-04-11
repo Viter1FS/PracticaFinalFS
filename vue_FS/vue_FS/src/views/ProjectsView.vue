@@ -1,106 +1,64 @@
 <template>
-    <v-container fluid class="pa-4 fill-width">
-      <div class="container-main">
-        <v-text-field
-          v-model="search"
-          label="Buscar"
-          prepend-inner-icon="mdi-magnify"
-          autofocus
-        />
-  
-        <!-- Tabla de datos -->
-        <v-data-table
-          :headers="headers"
-          :items="projects"
-          :search="search"
-          class="elevation-1"
-        >
-        <template v-slot:[`item.acions`]="{ item }"> 
-            <div class="d-flex">
-              <v-btn icon @click="editProject(item)" class="mr-1">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-              </v-btn>
-              <v-btn icon color="red" @click="dismissProject(item)">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-              </v-btn>
-            </div>
-          </template>
-        </v-data-table>
-        <!-- Botón flotante para agregar -->
-        <div class="mt-4 d-flex justify-end">
-          <v-btn
-            icon
-            color="primary"
-            class="add-user-btn"
-            fab
-            @click="openDialog()"
-            style=""
-          >
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </v-btn>
-        </div>
-      </div>
-  
-      <!-- Diálogo para agregar/editar -->
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-card>
-          <v-card-title>
-            <span class="text-h6">{{
-              editedProject.id_proyecto ? "Editar proyecto" : "Nuevo proyecto"
-            }}</span>
-          </v-card-title>
-          <v-card-text>
-            <v-form ref="formRef">
-              <v-text-field
-                label="Descrición"
-                v-model="editedProject.tx_descripción"
-                :rules="[rules.required]"
-              />
-              <v-text-field
-                label="Fecha inicio"
-                v-model="editedProject.f_inicio"
-                type="date"
-                :rules="[rules.required]"
-              />
-              
-              <v-text-field
-                label="Fecha fin"
-                v-model="editedProject.f_fin"
-                type="date"
-                
-              />
-              <v-text-field
-                label="Fecha baja"
-                v-model="editedProject.f_baja"
-                type="date"
-              />
+  <v-container fluid class="pa-4 fill-width">
+    <div class="container-main">
+      <v-text-field v-model="search" label="Buscar" prepend-inner-icon="mdi-magnify" autofocus />
 
-              <v-text-field
-                label="Lugar"
-                v-model="editedProject.tx_lugar"
-              />
-              <v-text-field
-                label="Observaciones"
-                v-model="editedProject.tx_observaciones"
-                
-              />
-             
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text @click="closeDialog">Cancelar</v-btn>
-            <v-btn color="primary" @click="saveProyecto">Guardar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-  
-      <!-- Snackbar de confirmación -->
-      <v-snackbar v-model="snackbar" :timeout="3000" color="success">
-        {{ snackbarText }}
-      </v-snackbar>
-    </v-container>
-  </template>
+      <!-- Tabla de datos -->
+      <v-data-table :headers="headers" :items="projects" :search="search" class="elevation-1">
+        <template #item.actions="{ item }">
+          <div class="d-flex">
+            <v-btn icon @click="editProject(item)" class="mr-1">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </v-btn>
+            <v-btn icon color="red" @click="dismissProject(item)">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </v-btn>
+          </div>
+        </template>
+      </v-data-table>
+      <!-- Botón flotante para agregar -->
+      <div class="mt-4 d-flex justify-end">
+        <v-btn icon color="primary" class="add-user-btn" fab @click="openDialog()" style="">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </v-btn>
+      </div>
+    </div>
+
+    <!-- Diálogo para agregar/editar -->
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h6">{{
+            editedProject.id_proyecto ? "Editar proyecto" : "Nuevo proyecto"
+            }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="formRef">
+            <v-text-field label="Descrición" v-model="editedProject.tx_descripción" :rules="[rules.required]" />
+            <v-text-field label="Fecha inicio" v-model="editedProject.f_inicio" type="date" :rules="[rules.required]" />
+
+            <v-text-field label="Fecha fin" v-model="editedProject.f_fin" type="date" />
+            <v-text-field label="Fecha baja" v-model="editedProject.f_baja" type="date" />
+
+            <v-text-field label="Lugar" v-model="editedProject.tx_lugar" />
+            <v-text-field label="Observaciones" v-model="editedProject.tx_observaciones" />
+
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="closeDialog">Cancelar</v-btn>
+          <v-btn color="primary" @click="saveProyecto">Guardar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Snackbar de confirmación -->
+    <v-snackbar v-model="snackbar" :timeout="3000" color="success">
+      {{ snackbarText }}
+    </v-snackbar>
+  </v-container>
+</template>
   
   <script>
   import axios from "axios";
@@ -320,33 +278,33 @@
     box-sizing: border-box;
     display: block;
   }
-  
+
   .v-data-table-header th {
     padding-left: -100px;
     /* Reducir el padding izquierdo */
     padding-right: -100px;
     /* Reducir el padding derecho */
   }
-  
+
   .add-user-btn {
     transition: all 0.3s ease;
     position: absolute;
-    bottom: 30px;
+    bottom: -8%;
     right: 30px;
     z-index: 10;
   }
-  
+
   @media (max-width: 768px) {
     .container-main {
       width: 90%;
       /* En pantallas pequeñas, puede ocupar el 90% */
       margin-right: 350vh;
     }
-  
+
     .add-user-btn {
       width: 100%;
       justify-content: center;
     }
   }
-  </style>
+</style>
   

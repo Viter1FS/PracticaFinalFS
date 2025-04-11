@@ -1,21 +1,11 @@
 <template>
   <v-container fluid class="pa-4 fill-width">
     <div class="container-main">
-      <v-text-field
-        v-model="search"
-        label="Buscar"
-        prepend-inner-icon="mdi-magnify"
-        autofocus
-      />
+      <v-text-field v-model="search" label="Buscar" prepend-inner-icon="mdi-magnify" autofocus />
 
       <!-- Tabla de datos -->
-      <v-data-table
-        :headers="headers"
-        :items="users"
-        :search="search"
-        class="elevation-1"
-      >
-      <template v-slot:[`item.acions`]="{ item }">  
+      <v-data-table :headers="headers" :items="users" :search="search" class="elevation-1">
+        <template #item.actions="{ item }">
           <div class="d-flex">
             <v-btn icon @click="editUser(item)" class="mr-2">
               <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -28,14 +18,7 @@
       </v-data-table>
       <!-- Botón flotante para agregar -->
       <div class="mt-4 d-flex justify-end">
-        <v-btn
-          icon
-          color="primary"
-          class="add-user-btn"
-          fab
-          @click="openDialog()"
-          style=""
-        >
+        <v-btn icon color="primary" class="add-user-btn" fab @click="openDialog()" style="">
           <i class="fa fa-plus" aria-hidden="true"></i>
         </v-btn>
       </div>
@@ -47,57 +30,21 @@
         <v-card-title>
           <span class="text-h6">{{
             editedUser.id_empleado ? "Editar empleado" : "Nuevo empleado"
-          }}</span>
+            }}</span>
         </v-card-title>
         <v-card-text>
           <v-form ref="formRef">
-            <v-text-field
-              label="NIF"
-              v-model="editedUser.tx_nif"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              label="Nombre"
-              v-model="editedUser.tx_nombre"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              label="Primer apellido"
-              v-model="editedUser.tx_apellido1"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              label="Segundo apellido"
-              v-model="editedUser.tx_apellido2"
-            />
-            <v-text-field
-              label="Fecha de nacimiento"
-              v-model="editedUser.f_nacimiento"
-              type="date"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              label="Teléfono 1"
-              v-model="editedUser.n_telefono1"
-              :rules="[rules.required]"
-            />
+            <v-text-field label="NIF" v-model="editedUser.tx_nif" :rules="[rules.required]" />
+            <v-text-field label="Nombre" v-model="editedUser.tx_nombre" :rules="[rules.required]" />
+            <v-text-field label="Primer apellido" v-model="editedUser.tx_apellido1" :rules="[rules.required]" />
+            <v-text-field label="Segundo apellido" v-model="editedUser.tx_apellido2" />
+            <v-text-field label="Fecha de nacimiento" v-model="editedUser.f_nacimiento" type="date"
+              :rules="[rules.required]" />
+            <v-text-field label="Teléfono 1" v-model="editedUser.n_telefono1" :rules="[rules.required]" />
             <v-text-field label="Teléfono 2" v-model="editedUser.n_telefono2" />
-            <v-text-field
-              label="Email"
-              v-model="editedUser.tx_email"
-              type="email"
-            />
-            <v-text-field
-              label="Fecha alta"
-              v-model="editedUser.f_alta"
-              type="date"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              label="Fecha baja"
-              v-model="editedUser.f_baja"
-              type="date"
-            />
+            <v-text-field label="Email" v-model="editedUser.tx_email" type="email" />
+            <v-text-field label="Fecha alta" v-model="editedUser.f_alta" type="date" :rules="[rules.required]" />
+            <v-text-field label="Fecha baja" v-model="editedUser.f_baja" type="date" />
             <!-- <v-select
               label="Proyecto"
               :items="proyectos_options"
@@ -107,16 +54,8 @@
               
             /> -->
 
-            <v-switch
-              label="¿Estado casad@?"
-              v-model="editedUser.cx_edocivil"
-              color="primary"
-            />
-            <v-switch
-              label="¿Formación universitaria?"
-              v-model="editedUser.b_formacionu"
-              color="primary"
-            />
+            <v-switch label="¿Estado casad@?" v-model="editedUser.cx_edocivil" color="primary" />
+            <v-switch label="¿Formación universitaria?" v-model="editedUser.b_formacionu" color="primary" />
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -441,7 +380,7 @@ export default {
 .add-user-btn {
   transition: all 0.3s ease;
   position: absolute;
-  bottom: 30px;
+  bottom: -8%;
   right: 25px;
   z-index: 10;
 }
