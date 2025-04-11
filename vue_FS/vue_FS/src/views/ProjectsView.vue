@@ -15,7 +15,7 @@
           :search="search"
           class="elevation-1"
         >
-          <template #item.actions="{ item }">
+        <template v-slot:[`item.acions`]="{ item }"> 
             <div class="d-flex">
               <v-btn icon @click="editProject(item)" class="mr-1">
                 <i class="fa fa-pencil" aria-hidden="true"></i>

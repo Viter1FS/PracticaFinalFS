@@ -15,7 +15,7 @@
         :search="search"
         class="elevation-1"
       >
-        <template #item.actions="{ item }">
+      <template v-slot:[`item.acions`]="{ item }">  
           <div class="d-flex">
             <v-btn icon @click="editUser(item)" class="mr-2">
               <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -435,9 +435,7 @@ export default {
 
 .v-data-table-header th {
   padding-left: -100px;
-  /* Reducir el padding izquierdo */
   padding-right: -100px;
-  /* Reducir el padding derecho */
 }
 
 .add-user-btn {
@@ -451,7 +449,6 @@ export default {
 @media (max-width: 768px) {
   .container-main {
     width: 90%;
-    /* En pantallas pequeñas, puede ocupar el 90% */
     margin-right: 350vh;
   }
 

@@ -10,4 +10,6 @@ public interface Empleado_ProyectoService {
 
     void assignProjectToEmployee(Integer empleadoId, Integer proyectoId) throws Exception;
 
+    void removeProjectFromEmployee(Integer employeeId, Integer projectId);
+
 }

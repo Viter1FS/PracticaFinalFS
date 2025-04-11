@@ -11,7 +11,7 @@
         <div class="links-container">
           <RouterLink to="/" class="home-link">Empleados</RouterLink>
           <RouterLink to="/projects" class="home-link">Proyectos</RouterLink>
-          <RouterLink to="/" class="home-link">Asignar Empleados</RouterLink>
+          <RouterLink to="/assignment" class="home-link">Asignar Empleados</RouterLink>
         </div>
       </v-app-bar>
 

@@ -65,4 +65,21 @@ public class Empleado_ProyectoServiceImpl implements Empleado_ProyectoService {
         empleadosProyectoRepository.save(proyectosEmpleados);
     }
 
+    public void removeProjectFromEmployee(Integer employeeId, Integer projectId) {
+        Empleado empleado = empleadoRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+        Proyectos proyecto = proyectoRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        Empleados_proyectoPK empk = new Empleados_proyectoPK(employeeId,projectId);
+        Empleados_proyecto ep = empleadosProyectoRepository.findById(empk).orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        // Eliminar la asignación del empleado al proyecto
+        empleado.getProyectosEmpleados().remove(ep); // Asumiendo que 'proyectos' es una lista en el modelo de empleado
+        proyecto.getEmpleadosProyectos().remove(ep);
+        
+        // Guardar la actualización en la base de datos
+        empleadoRepository.save(empleado);
+        proyectoRepository.save(proyecto);
+        empleadosProyectoRepository.delete(ep);
+    }
+
 }

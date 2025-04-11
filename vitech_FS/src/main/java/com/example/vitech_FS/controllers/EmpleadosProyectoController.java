@@ -30,13 +30,36 @@ public class EmpleadosProyectoController {
 
 
 
-    @PostMapping("/{id}/assignProject/{projectId}")
-    public ResponseEntity<?> assignProjectToEmployee(@PathVariable Integer id, @PathVariable Integer projectId) {
+    @PostMapping("/{projectId}/assignProject")
+    public ResponseEntity<?> assignProjectsToEmployees(
+            @PathVariable Integer projectId,
+            @RequestBody List<Integer> employeeIds // Recibimos una lista de IDs de empleados
+    ) {
         try {
-            empleProyService.assignProjectToEmployee(id, projectId);
-            return ResponseEntity.ok("Empleado asignado al proyecto con éxito.");
+            // Llamamos al servicio para asignar el proyecto a cada empleado
+            for (Integer employeeId : employeeIds) {
+                empleProyService.assignProjectToEmployee(employeeId, projectId);
+            }
+            return ResponseEntity.ok("Empleados asignados al proyecto con éxito.");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al asignar el proyecto al empleado.");
+            return ResponseEntity.status(500).body("Error al asignar el proyecto a los empleados.");
+        }
+    }
+
+
+    @PostMapping("/{projectId}/removeProject")
+    public ResponseEntity<?> removeProjectsFromEmployees(
+            @PathVariable Integer projectId,
+            @RequestBody List<Integer> employeeIds // Recibimos la lista de IDs de empleados
+    ) {
+        try {
+            // Llamamos al servicio para desasignar el proyecto de cada empleado
+            for (Integer employeeId : employeeIds) {
+                empleProyService.removeProjectFromEmployee(employeeId, projectId);
+            }
+            return ResponseEntity.ok("Empleados desasignados del proyecto con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al desasignar el proyecto de los empleados.");
         }
     }
 
