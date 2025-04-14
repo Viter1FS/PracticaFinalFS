@@ -1,0 +1,9 @@
+id_empleado,tx_nif,tx_nombre,tx_apellido1,tx_apellido2,f_nacimiento,n_telefono1,n_telefono2,tx_email,f_alta,f_baja,cx_edocivil,b_formacionu
+1,46512387Z,Estefania,Gamero,Garcia,1999-01-05,628456123,,Estefania.Gamero@email.com,2018-01-10,null,S,N
+2,12345678A,Silvia,García,López,1995-03-15,612345678,912345678,Silvia.garcia@email.com,2020-06-01,null,S,N
+3,47894562X,Irene,Pacheco,Paniagua,1993-11-30,634567890,645678901,irene.pacheco@email.com,2022-07-05,null,S,S
+4,46512387Z,Pablo,Verdu,Rascado,1990-06-15,612345678,623456789,pablo.verdu@email.com,2021-03-20,null,S,S
+5,48712345X,Sandra,Tello ,Cuello,1994-11-25,611223344,622334455,sandra.tello@email.com,2022-05-10,2025-04-10,S,S
+6,87654321B,Ivan bang ,Gutiérrez,Rodríguez,1999-07-11,623456789,666777888,ivan.gutierrez@email.com,2021-03-10,null,S,N
+8,12345678Z,Alina,Chisforsala,Lol,1970-08-21,600123456,,alina.chisforsala@email.com,2025-04-09,null,S,N
+9,50371409Y,David,Buenaño,Viteri,1993-06-27,628910125,66677888,soy_viteri@hotmail.com,2025-04-09,null,C,S

@@ -4,6 +4,7 @@
       <v-text-field v-model="search" label="Buscar" prepend-inner-icon="mdi-magnify" autofocus />
 
       <!-- Tabla de datos -->
+      <!-- Cuando usas el prop search en <v-data-table>, Vuetify automáticamente realiza una búsqueda global en todos los campos de cada objeto en items -->
       <v-data-table :headers="headers" :items="users" :search="search" class="elevation-1">
         <template #item.actions="{ item }">
           <div class="d-flex">

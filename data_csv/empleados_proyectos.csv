@@ -1,0 +1,6 @@
+id_empleado,id_proyecto,f_alta,tx_descripción,f_inicio,f_fin,f_baja,tx_lugar,tx_observaciones
+2,1,2025-04-11,Kiwoko diseño app,2024-03-01,2025-09-30,null,Madrid,Proyecto en fase de pruebas
+3,1,2025-04-11,Kiwoko diseño app,2024-03-01,2025-09-30,null,Madrid,Proyecto en fase de pruebas
+4,1,2025-04-10,Kiwoko diseño app,2024-03-01,2025-09-30,null,Madrid,Proyecto en fase de pruebas
+6,2,2025-04-14,Glovo app kiwoko,2025-04-10,9999-01-01,null,Madrid,no c
+8,2,2025-04-14,Glovo app kiwoko,2025-04-10,9999-01-01,null,Madrid,no c

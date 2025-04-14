@@ -1,14 +1,15 @@
 package com.example.vitech_FS.controllers;
 
-import com.example.vitech_FS.entitys.Empleado;
 import com.example.vitech_FS.entitys.Proyectos;
-import com.example.vitech_FS.services.EmpleadoService;
 import com.example.vitech_FS.services.ProyectoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 
@@ -96,6 +97,42 @@ public class ProyectoController {
             return  ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/export/csv")
+    public ResponseEntity<?> exportCsv() {
+        List<Proyectos> proyectos = proyectoService.findAll();
+        String ruta = "../data_csv/proyectos.csv"; // Ruta relativa fuera del proyecto
+        File archivo = new File(ruta);
+
+        // Crea la carpeta si no existe
+        archivo.getParentFile().mkdirs();
+
+        try (PrintWriter writer = new PrintWriter(archivo)) {
+            StringBuilder sb = new StringBuilder();
+
+            // Cabecera del CSV
+            sb.append("id_proyecto,tx_descripción,f_inicio,f_fin,f_baja,tx_lugar,tx_observaciones\n");
+
+            // Datos del CSV
+            for (Proyectos proyecto : proyectos) {
+                sb.append(proyecto.getId_proyecto()).append(",");  // ID del proyecto
+                sb.append(proyecto.getTx_descripción()).append(",");  // Descripción
+                sb.append(proyecto.getF_inicio()).append(",");  // Fecha de inicio
+                sb.append(proyecto.getF_fin()).append(",");  // Fecha de fin
+                sb.append(proyecto.getF_baja()).append(",");  // Fecha de baja
+                sb.append(proyecto.getTx_lugar()).append(",");  // Lugar
+                sb.append(proyecto.getTx_observaciones()).append("\n");  // Observaciones
+            }
+
+            writer.write(sb.toString());
+            return ResponseEntity.ok("CSV de proyectos exportado correctamente a: " + archivo.getAbsolutePath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error al exportar CSV: " + e.getMessage());
+        }
+    }
+
 
 //    @GetMapping("/projects/{projectId}/employees")
 //    public ResponseEntity<?> getEmployeesByProject(@PathVariable Integer projectId) {
